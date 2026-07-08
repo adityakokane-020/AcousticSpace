@@ -5,7 +5,7 @@ AcousticSpace is an AI-based application that helps users analyze sound and clas
 
 ## Team Members
 - Aditya Kokane (Team Leader - Month 1)
-- Member 2
+- Sudipta Chakraborty
 - Member 3
 - Member 4
 
