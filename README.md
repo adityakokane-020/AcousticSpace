@@ -1,17 +1,50 @@
 # AcousticSpace
 
-## Project Description
-AcousticSpace is an AI-based application that helps users analyze sound and classify different types of audio.
+## Project Title
+AcousticSpace: Deepfake Audio Detection using Room Impulse Response (RIR)
+
+## Problem Statement
+Current deepfake audio detectors mainly focus on voice characteristics. This project detects deepfake audio using Room Impulse Response (RIR), making detection more reliable.
 
 ## Team Members
-- Aditya Kokane (Team Leader - Month 1)
-- Sudipta Chakraborty
-- Member 3
-- Member 4
+- Aditya Kokane (Team Leader)
+- Backend Developer
+- Frontend Developer
+- ML Developer
 
-## Technologies
+## Tech Stack
+
+### Backend
 - Python
-- Machine Learning
-- Git
-- GitHub
-- VS Code
+- FastAPI
+
+### Frontend
+- React + Vite
+- TypeScript
+
+### Machine Learning
+- PyTorch
+- Librosa
+- NumPy
+
+## Folder Structure
+
+backend/
+frontend/
+ml/
+docs/
+assets/
+
+## Setup Instructions
+
+Coming Soon...
+
+## Current Status
+
+Project Initialization Completed.
+
+## Future Scope
+
+- Improve Detection Accuracy
+- Real-time Audio Detection
+- Cloud Deployment
