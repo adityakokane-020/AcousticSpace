@@ -1,5 +1,6 @@
-from fastapi import FastAPI
-
+from fastapi import FastAPI, UploadFile, File
+import os
+import shutil
 app = FastAPI(
     title = "AcousticSpace",
     version = "1.0.0",
@@ -26,4 +27,15 @@ def about():
         "theme": "Deepfake Audio Detection",
         "backend": "FastAPI",
         "version": "1.0.0"
+    }
+
+@app.post("/predict")
+async def predict(file: UploadFile = File(...)):
+    file_path = os.path.join("updates",file.filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {
+        "filename": file.filename,
+        "message": "Audio received successfully",
+        "saved_location": file_path
     }
