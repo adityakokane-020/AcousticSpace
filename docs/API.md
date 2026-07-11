@@ -1,9 +1,12 @@
 # API Documentation
 
-## Endpoints
+## API Endpoints
 
-### POST /predict
-Uploads an audio file and returns the prediction.
+POST /predict
 
-### GET /health
-Checks whether the backend server is running.
+Input:
+- Audio (.wav)
+
+Output:
+- Prediction
+- Confidence Score
