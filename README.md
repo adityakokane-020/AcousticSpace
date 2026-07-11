@@ -48,3 +48,7 @@ Project Initialization Completed.
 - Improve Detection Accuracy
 - Real-time Audio Detection
 - Cloud Deployment
+
+- ## Project Architecture
+
+![AcousticSpace Architecture](assets/architecture.png)
