@@ -42,3 +42,10 @@ def test_route():
     return {
         "message": "Routes module is working successfully."
     }
+
+@router.get("/user")
+def user_greet():
+    return{
+        "message": "Welcome !"
+
+    }
