@@ -5,5 +5,6 @@ def load_audio(file_path):
 
     return{
         "sample rate": sample_rate,
-        "duration": librosa.get_duration(y=audio, sr= sample_rate)
+        "duration": round(librosa.get_duration(y=audio, sr= sample_rate),2),
+        "totaL_samples": len(audio)
     }
