@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 import shutil
 import os
-from app.preprocess import local_audio
+from app.preprocess import local_audio, extract_spectogram
 
 router = APIRouter()
 
@@ -41,11 +41,13 @@ async def predict(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     
     audio_info = local_audio(file_path)
+    spectogram_info = extract_spectogram(file_path)
     return {
         "filename": file.filename,
         "message": "Audio received successfully",
         "saved_location": file_path,
-        "audio_info": audio_info
+        "audio_info": audio_info,
+        "spectogram_info": spectogram_info
     }
 @router.get("/test")
 def test_route():
