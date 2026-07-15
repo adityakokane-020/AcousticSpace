@@ -49,16 +49,24 @@ async def predict(file: UploadFile = File(...)):
         "audio_info": audio_info,
         "spectogram_info": spectogram_info
     }
+
 @router.get("/test")
 def test_route():
     return {
         "message": "Routes module is working successfully."
     }
 
-
 @router.get("/supported-format")
 def data_format():
     return{
         "supported_format": [".wav",".mp3"],
         "message": "These are the supported documents."
+    }
+
+@router.get("/model-status")
+def model_status():
+    return{
+        "model": "Not loaded",
+        "framework": "PyTorch",
+        "status": "Waiting for trained model"
     }
