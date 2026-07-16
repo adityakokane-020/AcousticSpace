@@ -1,7 +1,8 @@
 from fastapi import APIRouter, UploadFile, File
 import shutil
 import os
-from app.preprocess import local_audio, extract_spectogram
+from app.preprocess import load_audio, extract_spectrogram
+from app.model import predict_audio
 
 router = APIRouter()
 
@@ -36,18 +37,20 @@ def about():
 
 @router.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    file_path = os.path.join("updates",file.filename)
+    file_path = os.path.join("uploads",file.filename)
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
-    audio_info = local_audio(file_path)
-    spectogram_info = extract_spectogram(file_path)
+    audio_info = load_audio(file_path)
+    spectogram_info = extract_spectrogram(file_path)
+    prediction = predict_audio(spectogram_info)
     return {
         "filename": file.filename,
-        "message": "Audio received successfully",
+        "message": "Audio received and processed successfully",
         "saved_location": file_path,
         "audio_info": audio_info,
-        "spectogram_info": spectogram_info
+        "spectogram_info": spectogram_info,
+        "prediction": prediction
     }
 
 @router.get("/test")
@@ -56,11 +59,11 @@ def test_route():
         "message": "Routes module is working successfully."
     }
 
-@router.get("/supported-format")
+@router.get("/supported-formats")
 def data_format():
     return{
         "supported_format": [".wav",".mp3"],
-        "message": "These are the supported documents."
+        "message": "These are the supported audio formats."
     }
 
 @router.get("/model-status")

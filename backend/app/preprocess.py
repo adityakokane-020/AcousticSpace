@@ -9,10 +9,10 @@ def load_audio(file_path):
         "totaL_samples": len(audio)
     }
 
-def extract_spectogram(file_path):
+def extract_spectrogram(file_path):
     audio, sample_rate = librosa.load(file_path, sr=None)
     stft = librosa.stft(audio)
-    spectogram = librosa.amplitude_to_db(np.abs(stft), ref = np.max)
+    spectrogram = librosa.amplitude_to_db(np.abs(stft), ref = np.max)
     return {
-        "spectogram_shape": spectogram.shape
+        "spectrogram_shape": spectrogram.shape
     }
