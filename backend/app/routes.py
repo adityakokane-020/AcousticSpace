@@ -73,3 +73,12 @@ def model_status():
         "framework": "PyTorch",
         "status": "Waiting for trained model"
     }
+@router.get("/server-info")
+def server_info():
+    return {
+        "project": "AcousticSpace",
+        "backend": "FastAPI",
+        "framework": "Python",
+        "api_version": "1.0.0",
+        "status": "Running"
+    }
