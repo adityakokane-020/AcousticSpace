@@ -1,4 +1,13 @@
-function UploadSection() {
+import { useState } from "react";
+
+function UploadSection({ onDetect }) {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+
   return (
     <section className="upload-section">
       <h2>Upload Audio File</h2>
@@ -10,9 +19,19 @@ function UploadSection() {
         <input
           type="file"
           accept=".wav,.mp3,.flac"
+          onChange={handleFileChange}
         />
 
-        <button className="upload-btn">
+        {selectedFile && (
+          <p className="file-name">
+            Selected File: <strong>{selectedFile.name}</strong>
+          </p>
+        )}
+
+        <button
+          className="upload-btn"
+          onClick={onDetect}
+        >
           Detect Deepfake
         </button>
       </div>

@@ -95,3 +95,47 @@ button:hover {
   display: block;
   margin: 20px auto;
 }
+
+
+.file-name {
+  margin-top: 15px;
+  color: #38bdf8;
+  font-size: 16px;
+}
+
+
+.warning {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  padding: 25px;
+  background: #111827;
+  color: #cbd5e1;
+  margin-top: 60px;
+  font-size: 15px;
+}
+.loading-text {
+  text-align: center;
+  margin: 50px 0;
+  color: #38bdf8;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #334155;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.5s ease;
+}

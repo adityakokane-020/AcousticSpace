@@ -1,19 +1,38 @@
-function ResultCard() {
+function ResultCard({ result, confidence, status }) {
+  const progress = parseFloat(confidence) || 0;
+
   return (
     <section className="result-section">
       <h2>Prediction Result</h2>
 
       <div className="result-card">
-        <h3>✅ Real Audio</h3>
+        <h3>{result}</h3>
 
         <p>
-          Confidence:
-          <strong> 98.4%</strong>
+          Confidence: <strong>{confidence}</strong>
         </p>
+
+        <div className="progress-bar">
+          <div
+            className="progress-fill"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
 
         <p>
           Status:
-          <span className="success"> Authentic</span>
+          <span
+            className={
+              status === "Authentic"
+                ? "success"
+                : status === "Fake"
+                ? "warning"
+                : ""
+            }
+          >
+            {" "}
+            {status}
+          </span>
         </p>
       </div>
     </section>
