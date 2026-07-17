@@ -109,3 +109,33 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+
+.result-section {
+  text-align: center;
+  margin: 80px 0;
+}
+
+.result-card {
+  width: 400px;
+  margin: auto;
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.result-card h3 {
+  color: #22c55e;
+  margin-bottom: 20px;
+}
+
+.result-card p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.success {
+  color: #22c55e;
+  font-weight: bold;
+}

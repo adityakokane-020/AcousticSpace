@@ -1,8 +1,12 @@
-import "./App.css";
+import Navbar from "./components/Navbar";
+import UploadSection from "./components/UploadSection";
+import ResultCard from "./components/ResultCard";
 
 function App() {
   return (
-    <div className="app">
+    <>
+      <Navbar />
+
       <div className="hero">
         <h1>🎵 AcousticSpace</h1>
 
@@ -10,16 +14,18 @@ function App() {
 
         <p>
           Upload an audio recording and detect whether it is
-          <strong> Real</strong> or <strong>AI Generated</strong> using our
-          deep learning model.
+          <strong> Real </strong>
+          or
+          <strong> AI Generated</strong>.
         </p>
 
-        <div className="buttons">
-          <button className="upload-btn">Upload Audio</button>
-          <button className="learn-btn">Learn More</button>
-        </div>
+        <button>Learn More</button>
       </div>
-    </div>
+
+      <UploadSection />
+
+      <ResultCard />
+    </>
   );
 }
 
