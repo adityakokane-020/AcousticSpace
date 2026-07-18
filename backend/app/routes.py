@@ -17,7 +17,6 @@ def home():
 def user_greet():
     return{
         "message": "Welcome !"
-
     }
 
 @router.get("/health")
@@ -40,16 +39,19 @@ async def predict(file: UploadFile = File(...)):
     file_path = os.path.join("uploads",file.filename)
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-    
+    if not file.filename.endswith(('wav', 'mp3')):
+       return{
+        "message": "only wav and mp3 formats are supported"
+    }
     audio_info = load_audio(file_path)
-    spectogram_info = extract_spectrogram(file_path)
-    prediction = predict_audio(spectogram_info)
+    spectrogram_info = extract_spectrogram(file_path)
+    prediction = predict_audio(spectrogram_info)
     return {
         "filename": file.filename,
         "message": "Audio received and processed successfully",
         "saved_location": file_path,
         "audio_info": audio_info,
-        "spectogram_info": spectogram_info,
+        "spectrogram_info": spectrogram_info,
         "prediction": prediction
     }
 
