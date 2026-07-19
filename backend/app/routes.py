@@ -3,6 +3,12 @@ import shutil
 import os
 from app.preprocess import load_audio, extract_spectrogram
 from app.model import predict_audio
+from app.schema import (
+    PredictionResponse,
+    ModelStatusResponse,
+    HealthResponse,
+    ServerInfoResponse
+)
 
 router = APIRouter()
 
@@ -19,7 +25,7 @@ def user_greet():
         "message": "Welcome !"
     }
 
-@router.get("/health")
+@router.get("/health", response_class=HealthResponse)
 def health_check_server():
     return{
         "status" : "OK"
@@ -34,7 +40,7 @@ def about():
         "version": "1.0.0"
     }
 
-@router.post("/predict")
+@router.post("/predict", response_class=PredictionResponse)
 async def predict(file: UploadFile = File(...)):
     file_path = os.path.join("uploads",file.filename)
     with open(file_path, "wb") as buffer:
@@ -68,14 +74,14 @@ def data_format():
         "message": "These are the supported audio formats."
     }
 
-@router.get("/model-status")
+@router.get("/model-status", response_class=ModelStatusResponse)
 def model_status():
     return{
         "model": "Not loaded",
         "framework": "PyTorch",
         "status": "Waiting for trained model"
     }
-@router.get("/server-info")
+@router.get("/server-info", response_class=ServerInfoResponse)
 def server_info():
     return {
         "project": "AcousticSpace",
@@ -84,3 +90,4 @@ def server_info():
         "api_version": "1.0.0",
         "status": "Running"
     }
+
