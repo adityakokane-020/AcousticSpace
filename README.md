@@ -1,7 +1,7 @@
 # AcousticSpace
 
 ## Project Title
-AcousticSpace: Deepfake Audio Detection using Room Impulse Response (RIR)
+AcousticSpace: Deepfake Audio Detection using  Room Impulse Response (RIR)
 
 ## Problem Statement
 Current deepfake audio detectors mainly focus on voice characteristics. This project detects deepfake audio using Room Impulse Response (RIR), making detection more reliable.
