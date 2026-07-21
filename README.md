@@ -52,3 +52,29 @@ Project Initialization Completed.
 - ## Project Architecture
 
 ![AcousticSpace Architecture](assets/architecture.png)
+
+# AcousticSpace ML Module
+
+## Model
+- Random Forest Classifier
+
+## Dataset
+- ASVspoof2019 LA
+
+## Extracted Features
+- MFCC
+- Zero Crossing Rate
+- Spectral Centroid
+- Chroma
+
+## Evaluation
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- Confusion Matrix
+- ROC Curve
+- Feature Importance
+
+## Saved Model
+deepfake_detector_optimized.pkl

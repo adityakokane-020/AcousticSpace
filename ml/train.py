@@ -1,9 +1,15 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
 import joblib
-import os
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report
+)
 
 # Load Features
 df = pd.read_csv("ml/features.csv")
@@ -27,25 +33,20 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-print("Training Model...")
+# Load Trained Model
+model = joblib.load("ml/model/deepfake_detector.pkl")
 
-model = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42
-)
+# Prediction
+y_pred = model.predict(X_test)
 
-model.fit(X_train, y_train)
+print("\n========== MODEL EVALUATION ==========")
+print(f"Accuracy  : {accuracy_score(y_test, y_pred):.4f}")
+print(f"Precision : {precision_score(y_test, y_pred):.4f}")
+print(f"Recall    : {recall_score(y_test, y_pred):.4f}")
+print(f"F1 Score  : {f1_score(y_test, y_pred):.4f}")
 
-prediction = model.predict(X_test)
+print("\n========== CONFUSION MATRIX ==========")
+print(confusion_matrix(y_test, y_pred))
 
-print("\nAccuracy :", accuracy_score(y_test, prediction))
-
-print("\nClassification Report\n")
-print(classification_report(y_test, prediction))
-
-# Create model folder if needed
-os.makedirs("ml/model", exist_ok=True)
-
-joblib.dump(model, "ml/model/deepfake_detector.pkl")
-
-print("\n✅ Model Saved Successfully!")
+print("\n========== CLASSIFICATION REPORT ==========")
+print(classification_report(y_test, y_pred))
