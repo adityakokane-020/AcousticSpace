@@ -90,4 +90,11 @@ def server_info():
         "api_version": "1.0.0",
         "status": "Running"
     }
+@router.get("/prediction-history")
+def prediction_history():
+    return {
+        "total_predictions": 0,
+        "history": [],
+        "message": "No predictions available yet."
+    }
 
