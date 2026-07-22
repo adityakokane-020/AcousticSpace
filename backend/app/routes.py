@@ -42,24 +42,29 @@ def about():
 
 @router.post("/predict", response_class=PredictionResponse)
 async def predict(file: UploadFile = File(...)):
-    file_path = os.path.join("uploads",file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    if not file.filename.endswith(('wav', 'mp3')):
-       return{
-        "message": "only wav and mp3 formats are supported"
-    }
-    audio_info = load_audio(file_path)
-    spectrogram_info = extract_spectrogram(file_path)
-    prediction = predict_audio(spectrogram_info)
-    return {
-        "filename": file.filename,
-        "message": "Audio received and processed successfully",
-        "saved_location": file_path,
-        "audio_info": audio_info,
-        "spectrogram_info": spectrogram_info,
-        "prediction": prediction
-    }
+    try:
+        file_path = os.path.join("uploads",file.filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        if not file.filename.endswith(('wav', 'mp3')):
+            return{
+                "message": "only wav and mp3 formats are supported"
+            }
+        audio_info = load_audio(file_path)
+        spectrogram_info = extract_spectrogram(file_path)
+        prediction = predict_audio(spectrogram_info)
+        return {
+            "filename": file.filename,
+            "message": "Audio received and processed successfully",
+            "saved_location": file_path,
+            "audio_info": audio_info,
+            "spectrogram_info": spectrogram_info,
+            "prediction": prediction
+        }
+    except Exception as e:
+        return{
+            "error": str(e)
+        }
 
 @router.get("/test")
 def test_route():
