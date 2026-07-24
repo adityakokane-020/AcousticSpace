@@ -78,3 +78,26 @@ Project Initialization Completed.
 
 ## Saved Model
 deepfake_detector_optimized.pkl
+
+# Machine Learning Module
+
+## Overview
+This module is responsible for detecting deepfake audio using Room Impulse Response (RIR) features.
+
+## Current Progress
+- Dataset collection completed (ASVspoof)
+- Dataset preprocessing completed
+- Audio feature extraction implemented
+- Initial model training pipeline created
+
+## Files
+- create_dataset.py
+- extract_features.py
+- extract_dataset_features.py
+- train.py
+
+## Next Tasks
+- Train the deep learning model
+- Save trained model
+- Build prediction pipeline
+- Integrate with FastAPI backend
