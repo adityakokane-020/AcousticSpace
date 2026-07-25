@@ -1,0 +1,18 @@
+# Audio Configuration
+SAMPLE_RATE = 16000
+N_MELS = 128
+N_FFT = 1024
+HOP_LENGTH = 512
+
+# Training Configuration
+IMAGE_SIZE = 224
+BATCH_SIZE = 16
+EPOCHS = 20
+LEARNING_RATE = 0.0001
+
+# Classes
+NUM_CLASSES = 2
+
+# Labels
+REAL = 0
+FAKE = 1
