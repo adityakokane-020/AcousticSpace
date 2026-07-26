@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+torch
+torchvision
+librosa
+python-multipart
+numpy
+pandas
+matplotlib
+scikit-learn
+Pillow
+joblib

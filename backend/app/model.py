@@ -5,13 +5,21 @@ MODEL_PATH = "ml/model/best_model.pth"
 
 model = AcousticCNN()
 model.state_dict(
-    model.load( MODEL_PATH, map_location= torch.device("cpu") )
+    torch.load( MODEL_PATH, map_location= torch.device("cpu") )
 )
 model.eval()
 def predict_audio(features):
-    #ml model details
+    with torch.no_grad():
+        output = model(features)
+
+        probabilities = torch.softmax(output,dim=1)
+
+        confidence, predicted = torch.max(probabilities, dim=1)
+
+    labels = ["Real","Fake"]
+
     return{
-        "prediction": "model loaded successfully",
-        "confidence": None
+        "prediction": labels[predicted.item()],
+        "confidence": labels[confidence.item(), 4]
 
     }
