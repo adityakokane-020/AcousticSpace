@@ -25,7 +25,7 @@ def user_greet():
         "message": "Welcome !"
     }
 
-@router.get("/health", response_class=HealthResponse)
+@router.get("/health", response_model=HealthResponse)
 def health_check_server():
     return{
         "status" : "OK"
@@ -40,25 +40,26 @@ def about():
         "version": "1.0.0"
     }
 
-@router.post("/predict", response_class=PredictionResponse)
+@router.post("/predict", response_model=PredictionResponse)
 async def predict(file: UploadFile = File(...)):
     try:
+        if not file.filename.lower().endswith(('wav', 'mp3')):
+            return{
+                     "message": "only wav and mp3 formats are supported"
+                    }
+        os.makedirs("uploads", exist_ok=True)
         file_path = os.path.join("uploads",file.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        if not file.filename.endswith(('wav', 'mp3')):
-            return{
-                "message": "only wav and mp3 formats are supported"
-            }
+        
         audio_info = load_audio(file_path)
-        spectrogram_info = extract_spectrogram(file_path)
-        prediction = predict_audio(spectrogram_info)
+        spectrogram_tensor = extract_spectrogram(file_path)
+        prediction = predict_audio(spectrogram_tensor)
         return {
             "filename": file.filename,
             "message": "Audio received and processed successfully",
             "saved_location": file_path,
             "audio_info": audio_info,
-            "spectrogram_info": spectrogram_info,
             "prediction": prediction
         }
     except Exception as e:
@@ -79,14 +80,14 @@ def data_format():
         "message": "These are the supported audio formats."
     }
 
-@router.get("/model-status", response_class=ModelStatusResponse)
+@router.get("/model-status", response_model=ModelStatusResponse)
 def model_status():
     return{
-        "model": "Not loaded",
+        "model": "AcousticCNN",
         "framework": "PyTorch",
-        "status": "Waiting for trained model"
+        "status": "Loaded"
     }
-@router.get("/server-info", response_class=ServerInfoResponse)
+@router.get("/server-info", response_model=ServerInfoResponse)
 def server_info():
     return {
         "project": "AcousticSpace",

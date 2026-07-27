@@ -4,7 +4,7 @@ from ml.model import AcousticCNN
 MODEL_PATH = "ml/model/best_model.pth"
 
 model = AcousticCNN()
-model.state_dict(
+model.load_state_dict(
     torch.load( MODEL_PATH, map_location= torch.device("cpu") )
 )
 model.eval()
@@ -16,10 +16,10 @@ def predict_audio(features):
 
         confidence, predicted = torch.max(probabilities, dim=1)
 
-    labels = ["Real","Fake"]
+    labels = ["Fake","Real"]
 
     return{
         "prediction": labels[predicted.item()],
-        "confidence": labels[confidence.item(), 4]
+        "confidence": round(confidence.item(), 4)
 
     }
