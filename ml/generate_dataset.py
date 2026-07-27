@@ -3,6 +3,7 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.signal import convolve
 
 # Paths
 protocol_file = "ml/asvspoof/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt"
@@ -37,6 +38,17 @@ with open(protocol_file, "r") as file:
             continue
 
         y, sr = librosa.load(audio_path, sr=16000)
+
+        rir = np.zeros(4000)
+        rir[0] = 1.0
+
+        for i in range(1, len(rir)):
+            rir[i] = 0.9 ** i
+            
+        # Apply RIR to the audio
+        y = convolve(y, rir, mode="full")
+        # Keep the original audio length
+        y = y[:len(y)]
 
         mel = librosa.feature.melspectrogram(
             y=y,
