@@ -53,5 +53,5 @@ class ASTDataset(Dataset):
 
         return {
             "input_values": inputs["input_values"].squeeze(0),
-            "label": torch.tensor(label)
+            "labels": torch.tensor(label)
         }
