@@ -30,6 +30,12 @@ model.eval()
 
 audio_path = input("Enter audio path: ")
 
+import os
+
+if not os.path.exists(audio_path):
+    print("❌ Audio file not found!")
+    exit()
+
 audio, sr = librosa.load(audio_path, sr=16000)
 
 inputs = feature_extractor(
@@ -50,9 +56,9 @@ with torch.no_grad():
 
 confidence = probabilities[0][prediction].item() * 100
 
-if prediction == 0:
-    print("\nPrediction : REAL")
-else:
-    print("\nPrediction : FAKE")
+label = "REAL" if prediction == 0 else "FAKE"
 
+print("\n==============================")
+print("Prediction :", label)
 print(f"Confidence : {confidence:.2f}%")
+print("==============================")

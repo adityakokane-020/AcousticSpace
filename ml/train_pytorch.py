@@ -3,25 +3,20 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from torchvision import transforms
+
 from torch.utils.data import DataLoader, random_split
 
-from dataset import SpectrogramDataset
+from cnn_dataset import CNNDataset
 from model import AcousticCNN
 
 # Device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Transform
-transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor()
-])
+
 
 # Dataset
-dataset = SpectrogramDataset(
-    root_dir="ml/dataset",
-    transform=transform
+dataset = CNNDataset(
+    "ml/spectrograms"
 )
 
 # Split
@@ -56,7 +51,7 @@ optimizer = optim.Adam(
     lr=0.001
 )
 
-epochs = 5
+epochs = 1
 
 print("Training Started...\n")
 
@@ -84,14 +79,14 @@ for epoch in range(epochs):
         running_loss += loss.item()
 
     print(
-        f"Epoch {epoch+1}/{epochs}  Loss : {running_loss:.4f}"
-    )
+    f"Epoch {epoch+1}/{epochs}  Loss : {running_loss/len(train_loader):.4f}"
+)
 
 os.makedirs("ml/model", exist_ok=True)
 
 torch.save(
     model.state_dict(),
-    "ml/model/best_model.pth"
+    "ml/model/cnn_best_model.pth"
 )
 
 print("\nModel Saved Successfully!")
