@@ -16,3 +16,12 @@ NUM_CLASSES = 2
 # Labels
 REAL = 0
 FAKE = 1
+
+# AST Configuration
+MODEL_NAME = "MIT/ast-finetuned-audioset-10-10-0.4593"
+
+TRAIN_PROTOCOL = "ml/asvspoof/ASVspoof2019_LA_cm_protocols/ASVspoof2019.LA.cm.train.trn.txt"
+
+TRAIN_AUDIO = "ml/asvspoof/ASVspoof2019_LA_train/flac"
+
+MODEL_SAVE = "ml/models/best_ast_model.pth"
