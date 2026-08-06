@@ -1,146 +1,76 @@
 import librosa
 import numpy as np
+import os
 
-# ===========================
-# Load Audio
-# ===========================
 
-audio_path = input("Enter Audio Path: ")
+def analyze_breathing(audio_path):
 
-audio, sr = librosa.load(audio_path, sr=16000)
+    if not os.path.exists(audio_path):
+        return {"error": "Audio file not found."}
 
-duration = librosa.get_duration(y=audio, sr=sr)
+    audio, sr = librosa.load(audio_path, sr=16000)
 
-print("\n==============================")
-print("     Audio Information")
-print("==============================")
+    intervals = librosa.effects.split(
+        audio,
+        top_db=30
+    )
 
-print("Sample Rate :", sr)
-print("Duration :", round(duration, 2), "seconds")
-print("Total Samples :", len(audio))
+    pause_list = []
 
-# ===========================
-# Silence Analysis
-# ===========================
+    previous = 0
 
-threshold = 0.01
+    for start, end in intervals:
 
-silent_samples = np.sum(np.abs(audio) < threshold)
+        if start > previous:
 
-silent_percentage = (silent_samples / len(audio)) * 100
+            pause = (start - previous) / sr
 
-print("\n==============================")
-print("    Silence Analysis")
-print("==============================")
+            pause_list.append(pause)
 
-print("Silent Samples :", silent_samples)
-print(f"Silence Percentage : {silent_percentage:.2f}%")
+        previous = end
 
-# ===========================
-# Silence Intervals
-# ===========================
+    last_pause = (len(audio) - previous) / sr
 
-print("\n==============================")
-print("    Silence Intervals")
-print("==============================")
+    pause_list.append(last_pause)
 
-intervals = librosa.effects.split(
-    audio,
-    top_db=30
-)
+    average_pause = np.mean(pause_list)
 
-pause_list = []
+    maximum_pause = np.max(pause_list)
 
-previous = 0
+    minimum_pause = np.min(pause_list)
 
-for start, end in intervals:
+    if average_pause >= 0.20:
+        status = "Natural Breathing"
+    else:
+        status = "Suspicious Breathing"
 
-    if start > previous:
+    score = min(100, average_pause * 400)
 
-        pause = (start - previous) / sr
+    return {
 
-        pause_list.append(pause)
+        "status": status,
 
-        print(f"Silence : {pause:.2f} sec")
+        "average_pause": float(round(average_pause, 2)),
 
-    previous = end
+        "maximum_pause": float(round(maximum_pause, 2)),
 
-last_pause = (len(audio) - previous) / sr
+        "minimum_pause": float(round(minimum_pause, 2)),
 
-pause_list.append(last_pause)
+        "score": float(round(score, 2))
 
-print(f"Last Silence : {last_pause:.2f} sec")
+    }
 
-# ===========================
-# Breathing Statistics
-# ===========================
 
-average_pause = np.mean(pause_list)
+if __name__ == "__main__":
 
-maximum_pause = np.max(pause_list)
+    audio_path = input("Enter Audio Path : ")
 
-minimum_pause = np.min(pause_list)
+    result = analyze_breathing(audio_path)
 
-print("\n==============================")
-print("  Breathing Statistics")
-print("==============================")
+    print("\n==============================")
+    print("Breathing Analysis")
+    print("==============================")
 
-print("Total Pauses :", len(pause_list))
-print("Average Pause :", round(average_pause, 2), "sec")
-print("Maximum Pause :", round(maximum_pause, 2), "sec")
-print("Minimum Pause :", round(minimum_pause, 2), "sec")
+    print(result)
 
-# ===========================
-# Breathing Result
-# ===========================
-
-if average_pause >= 0.20:
-    status = "Natural Breathing"
-else:
-    status = "Suspicious Breathing"
-
-print("\n==============================")
-print("   Breathing Result")
-print("==============================")
-
-print("Status :", status)
-
-# ===========================
-# Breathing Score
-# ===========================
-
-score = min(100, average_pause * 400)
-
-print("\n==============================")
-print("   Breathing Score")
-print("==============================")
-
-print(f"Score : {score:.0f}%")
-
-# ===========================
-# Backend JSON Output
-# ===========================
-
-result = {
-
-    "status": status,
-
-    "average_pause": float(round(average_pause, 2)),
-
-    "maximum_pause": float(round(maximum_pause, 2)),
-
-    "minimum_pause": float(round(minimum_pause, 2)),
-
-    "score": float(round(score, 2))
-
-}
-
-print("\n==============================")
-print(" Backend JSON Output")
-print("==============================")
-
-print(result)
-
-print("\n==============================")
-print("Breathing Analysis Completed")
-print("==============================")
+    print("==============================")

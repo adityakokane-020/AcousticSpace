@@ -1,3 +1,4 @@
+import os
 import torch
 from PIL import Image
 from torchvision import transforms
@@ -24,29 +25,51 @@ model.load_state_dict(
 model.to(device)
 model.eval()
 
-image_path = input("Enter Spectrogram Image Path: ")
 
-image = Image.open(image_path)
-image = transform(image)
-image = image.unsqueeze(0).to(device)
+def predict_cnn(image_path):
 
-with torch.no_grad():
+    if not os.path.exists(image_path):
+        return {
+            "error": "Image not found."
+        }
 
-    outputs = model(image)
+    image = Image.open(image_path)
 
-    probabilities = torch.softmax(outputs, dim=1)
+    image = transform(image)
 
-    prediction = torch.argmax(probabilities, dim=1).item()
+    image = image.unsqueeze(0).to(device)
 
-confidence = probabilities[0][prediction].item() * 100
+    with torch.no_grad():
 
-print("\n==============================")
+        outputs = model(image)
 
-if prediction == 0:
-    print("Prediction : REAL")
-else:
-    print("Prediction : FAKE")
+        probabilities = torch.softmax(outputs, dim=1)
 
-print(f"Confidence : {confidence:.2f}%")
+        prediction = torch.argmax(probabilities, dim=1).item()
 
-print("==============================")
+    confidence = float(probabilities[0][prediction].item() * 100)
+
+    label = "REAL" if prediction == 0 else "FAKE"
+
+    return {
+
+        "prediction": label,
+
+        "confidence": round(confidence, 2)
+
+    }
+
+
+if __name__ == "__main__":
+
+    image_path = input("Enter Spectrogram Image Path : ")
+
+    result = predict_cnn(image_path)
+
+    print("\n==============================")
+    print("CNN Prediction")
+    print("==============================")
+
+    print(result)
+
+    print("==============================")
