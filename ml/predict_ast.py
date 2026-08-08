@@ -1,3 +1,4 @@
+import os
 import torch
 import librosa
 
@@ -28,37 +29,55 @@ model.load_state_dict(
 model.to(device)
 model.eval()
 
-audio_path = input("Enter audio path: ")
 
-import os
+def predict_ast(audio_path):
 
-if not os.path.exists(audio_path):
-    print("❌ Audio file not found!")
-    exit()
+    if not os.path.exists(audio_path):
+        return {
+            "error": "Audio file not found."
+        }
 
-audio, sr = librosa.load(audio_path, sr=16000)
+    audio, sr = librosa.load(audio_path, sr=16000)
 
-inputs = feature_extractor(
-    audio,
-    sampling_rate=16000,
-    return_tensors="pt"
-)
-
-with torch.no_grad():
-
-    outputs = model(
-        input_values=inputs["input_values"].to(device)
+    inputs = feature_extractor(
+        audio,
+        sampling_rate=16000,
+        return_tensors="pt"
     )
 
-    probabilities = torch.softmax(outputs.logits, dim=1)
+    with torch.no_grad():
 
-    prediction = torch.argmax(probabilities, dim=1).item()
+        outputs = model(
+            input_values=inputs["input_values"].to(device)
+        )
 
-confidence = probabilities[0][prediction].item() * 100
+        probabilities = torch.softmax(outputs.logits, dim=1)
 
-label = "REAL" if prediction == 0 else "FAKE"
+        prediction = torch.argmax(probabilities, dim=1).item()
 
-print("\n==============================")
-print("Prediction :", label)
-print(f"Confidence : {confidence:.2f}%")
-print("==============================")
+    confidence = float(probabilities[0][prediction].item() * 100)
+
+    label = "REAL" if prediction == 0 else "FAKE"
+
+    return {
+
+        "prediction": label,
+
+        "confidence": round(confidence, 2)
+
+    }
+
+
+if __name__ == "__main__":
+
+    audio_path = input("Enter Audio Path : ")
+
+    result = predict_ast(audio_path)
+
+    print("\n==============================")
+    print("AST Prediction")
+    print("==============================")
+
+    print(result)
+
+    print("==============================")

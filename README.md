@@ -1,16 +1,24 @@
 # AcousticSpace
 
 ## Project Title
-AcousticSpace: Deepfake Audio Detection using Room Impulse Response (RIR)
+AcousticSpace: Physics-Based Deepfake Audio Detection using Room Impulse Response (RIR)
+
+---
 
 ## Problem Statement
-Current deepfake audio detectors mainly focus on voice characteristics. This project detects deepfake audio using Room Impulse Response (RIR), making detection more reliable.
+
+Traditional deepfake audio detection methods rely mainly on speaker characteristics. Our project detects deepfake audio using acoustic physics, especially Room Impulse Response (RIR), along with deep learning models such as AST and CNN.
+
+---
 
 ## Team Members
-- Aditya Kokane (Team Leader)
-- Backend Developer
-- Frontend Developer
-- ML Developer
+
+- Aditya Kokane – Team Leader / Machine Learning
+- Sudipta Chakraborty – Backend Developer
+- Umera Usman Khwaja – Frontend Developer
+- Abhi – Machine Learning
+
+---
 
 ## Tech Stack
 
@@ -19,85 +27,171 @@ Current deepfake audio detectors mainly focus on voice characteristics. This pro
 - FastAPI
 
 ### Frontend
-- React + Vite
+- React
+- Vite
 - TypeScript
 
 ### Machine Learning
 - PyTorch
+- Hugging Face Transformers
 - Librosa
 - NumPy
+- Scikit-learn
+
+---
 
 ## Folder Structure
 
+```
 backend/
 frontend/
 ml/
 docs/
 assets/
+```
 
-## Setup Instructions
+---
 
-Coming Soon...
+## Machine Learning Pipeline
 
-## Current Status
+Audio File
 
-Project Initialization Completed.
+↓
 
-## Future Scope
+Librosa Preprocessing
 
-- Improve Detection Accuracy
-- Real-time Audio Detection
-- Cloud Deployment
+↓
 
-- ## Project Architecture
+Mel Spectrogram Generation
 
-![AcousticSpace Architecture](assets/architecture.png)
+↓
 
-# AcousticSpace ML Module
+Room Impulse Response (RIR)
 
-## Model
-- Random Forest Classifier
+↓
 
-## Dataset
-- ASVspoof2019 LA
+AST / CNN Model
 
-## Extracted Features
-- MFCC
-- Zero Crossing Rate
-- Spectral Centroid
-- Chroma
+↓
 
-## Evaluation
+Prediction
+
+↓
+
+FastAPI
+
+↓
+
+React Dashboard
+
+---
+
+## Mid Review Progress
+
+### Machine Learning
+
+✅ ASVspoof2019 Dataset Prepared
+
+✅ Audio Preprocessing using Librosa
+
+✅ Spectrogram Generation
+
+✅ RIR Feature Extraction
+
+✅ AST Dataset Preparation
+
+✅ AST Model Training
+
+✅ AST Model Evaluation
+
+✅ AST Model Prediction
+
+✅ CNN Spectrogram Dataset
+
+✅ CNN Model Training
+
+✅ CNN Model Evaluation
+
+✅ CNN Prediction
+
+✅ CNN vs AST Performance Comparison
+
+Status:
+Machine Learning module is ready for Backend Integration.
+
+---
+
+### Backend
+
+✅ FastAPI Project Structure
+
+⏳ Model Integration
+
+⏳ Prediction API
+
+---
+
+### Frontend
+
+✅ React Project Setup
+
+✅ Basic Dashboard
+
+⏳ API Integration
+
+---
+
+## Models Implemented
+
+### AST (Audio Spectrogram Transformer)
+
+- Training
+- Evaluation
+- Prediction
+
+### CNN Baseline
+
+- Training
+- Evaluation
+- Prediction
+
+---
+
+## Evaluation Metrics
+
 - Accuracy
 - Precision
 - Recall
 - F1 Score
 - Confusion Matrix
-- ROC Curve
-- Feature Importance
+- Classification Report
 
-## Saved Model
-deepfake_detector_optimized.pkl
+---
 
-# Machine Learning Module
+## Current Status
 
-## Overview
-This module is responsible for detecting deepfake audio using Room Impulse Response (RIR) features.
+Week 1 ✅ Completed
 
-## Current Progress
-- Dataset collection completed (ASVspoof)
-- Dataset preprocessing completed
-- Audio feature extraction implemented
-- Initial model training pipeline created
+Week 2 ✅ Completed
 
-## Files
-- create_dataset.py
-- extract_features.py
-- extract_dataset_features.py
-- train.py
+Mid Review ✅ Ready
 
-## Next Tasks
-- Train the deep learning model
-- Save trained model
-- Build prediction pipeline
-- Integrate with FastAPI backend
+Week 3 ⏳ In Progress
+
+Week 4 ⏳ Pending
+
+---
+
+## Future Work
+
+- Breathing Cadence Detection
+- FastAPI Integration
+- React Integration
+- Docker Deployment
+- CI/CD Pipeline
+
+---
+
+## Project Architecture
+
+![Architecture](assets/architecture.png)
