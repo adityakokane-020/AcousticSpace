@@ -1,7 +1,13 @@
 import torch
-from ml.model import AcousticCNN
+import sys
+from pathlib import Path
 
-MODEL_PATH = "ml/model/best_model.pth"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+    
+from ml.model import AcousticCNN
+from app.config import MODEL_PATH
 
 model = AcousticCNN()
 model.load_state_dict(

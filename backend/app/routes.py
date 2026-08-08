@@ -1,6 +1,7 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 import os
+import logging
 from app.preprocess import load_audio, extract_spectrogram
 from app.model import predict_audio
 from app.schema import (
@@ -8,6 +9,12 @@ from app.schema import (
     ModelStatusResponse,
     HealthResponse,
     ServerInfoResponse
+)
+from app.config import(
+    UPLOAD_FOLDER,
+    SUPPORTED_FORMATS,
+    MAX_FILE_SIZE,
+    TEMP_PATH
 )
 
 router = APIRouter()
@@ -43,11 +50,21 @@ def about():
 @router.post("/predict", response_model=PredictionResponse)
 async def predict(file: UploadFile = File(...)):
     try:
-        if not file.filename.lower().endswith(('wav', 'mp3')):
+        if not file.filename.lower().endswith((SUPPORTED_FORMATS)):
             return{
                      "message": "only wav and mp3 formats are supported"
                     }
-        os.makedirs("uploads", exist_ok=True)
+        
+        contents = await file.read()
+
+        if len(contents) > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=400,
+                detail = "File size exceeds 20 MB"
+            )
+        await file.seek(0)
+
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         file_path = os.path.join("uploads",file.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
@@ -55,6 +72,21 @@ async def predict(file: UploadFile = File(...)):
         audio_info = load_audio(file_path)
         spectrogram_tensor = extract_spectrogram(file_path)
         prediction = predict_audio(spectrogram_tensor)
+
+        prediction_history.append({
+            "filename": file.filename,
+            "prediction": prediction["prediction"],
+            "confidence": prediction["confidence"]
+        })
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        temp_path = TEMP_PATH
+
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
         return {
             "filename": file.filename,
             "message": "Audio received and processed successfully",
@@ -62,11 +94,16 @@ async def predict(file: UploadFile = File(...)):
             "audio_info": audio_info,
             "prediction": prediction
         }
-    except Exception as e:
-        return{
-            "error": str(e)
-        }
+    except HTTPException:
+        raise
 
+    except Exception as e:
+        raise HTTPException(
+             status_code=500,
+             detail = "Invalid Audio Input"
+        )
+           
+        
 @router.get("/test")
 def test_route():
     return {
@@ -99,8 +136,7 @@ def server_info():
 @router.get("/prediction-history")
 def prediction_history():
     return {
-        "total_predictions": 0,
-        "history": [],
-        "message": "No predictions available yet."
+        "total_predictions": len(prediction_history),
+        "history": prediction_history
     }
 
