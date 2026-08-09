@@ -18,6 +18,7 @@ from app.config import(
 )
 
 router = APIRouter()
+prediction_history = []
 
 
 @router.get("/")
@@ -65,7 +66,7 @@ async def predict(file: UploadFile = File(...)):
         await file.seek(0)
 
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-        file_path = os.path.join("uploads",file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER,file.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
@@ -134,7 +135,7 @@ def server_info():
         "status": "Running"
     }
 @router.get("/prediction-history")
-def prediction_history():
+def get_prediction_history():
     return {
         "total_predictions": len(prediction_history),
         "history": prediction_history
