@@ -15,3 +15,14 @@ Thumbs.db
 .vscode/
 .idea/
 
+ml/asvspoof/
+
+ml/model/
+*.pth
+
+ml/features_rir.csv
+*.csv
+
+__pycache__/
+*.pyc
+
