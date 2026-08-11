@@ -1,13 +1,15 @@
 function Navbar() {
   return (
     <nav className="navbar">
-      <h2 className="logo">🎵 AcousticSpace</h2>
+      <div className="logo">
+        🎵 <span>AcousticSpace</span>
+      </div>
 
       <ul className="nav-links">
-        <li>Home</li>
-        <li>About</li>
-        <li>Upload</li>
-        <li>Contact</li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#upload">Upload</a></li>
+        <li><a href="#result">Results</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
   );
