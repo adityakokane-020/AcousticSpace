@@ -2,15 +2,16 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 import os
 import logging
-from app.preprocess import load_audio, extract_spectrogram
-from app.model import predict_audio
-from app.schema import (
+import time
+from backend.app.preprocess import load_audio, extract_spectrogram
+from backend.app.model import predict_audio
+from backend.app.schema import (
     PredictionResponse,
     ModelStatusResponse,
     HealthResponse,
     ServerInfoResponse
 )
-from app.config import(
+from backend.app.config import(
     UPLOAD_FOLDER,
     SUPPORTED_FORMATS,
     MAX_FILE_SIZE,
@@ -58,6 +59,8 @@ async def predict(file: UploadFile = File(...)):
         
         contents = await file.read()
 
+        start_time = time.perf_counter()
+
         if len(contents) > MAX_FILE_SIZE:
             raise HTTPException(
                 status_code=400,
@@ -73,6 +76,8 @@ async def predict(file: UploadFile = File(...)):
         audio_info = load_audio(file_path)
         spectrogram_tensor = extract_spectrogram(file_path)
         prediction = predict_audio(spectrogram_tensor)
+
+        inference_time = time.perf_counter() - start_time
 
         prediction_history.append({
             "filename": file.filename,
@@ -93,7 +98,8 @@ async def predict(file: UploadFile = File(...)):
             "message": "Audio received and processed successfully",
             "saved_location": file_path,
             "audio_info": audio_info,
-            "prediction": prediction
+            "prediction": prediction,
+            "inference_time": round(inference_time, 4)
         }
     except HTTPException:
         raise
