@@ -2,11 +2,14 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY requirements-docker.txt .
 
-RUN grep -vE '^(torch|torchvision)([<=>].*)?$' requirements.txt > requirements-docker.txt && \
-    pip install --no-cache-dir -r requirements-docker.txt && \
-    pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch torchvision
+RUN pip install --no-cache-dir -r requirements-docker.txt
+
+RUN pip install --no-cache-dir \
+    torch==2.12.1 \
+    torchvision==0.27.1 \
+    --index-url https://download.pytorch.org/whl/cpu
 
 COPY backend ./backend
 COPY ml ./ml

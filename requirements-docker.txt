@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+librosa
+python-multipart
+numpy
+pandas
+matplotlib
+scikit-learn
+Pillow
+joblib
+scipy
+transformers
