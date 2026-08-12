@@ -2,6 +2,8 @@ import torch
 
 from torch.utils.data import DataLoader
 from ast_dataset import ASTDataset
+from collate import collate_fn
+
 
 print("Loading Dataset...")
 
@@ -11,28 +13,21 @@ dataset = ASTDataset(
 )
 
 print("Dataset Loaded")
-
-print("Total Samples :", len(dataset))
+print("Total Samples:", len(dataset))
 
 loader = DataLoader(
     dataset,
     batch_size=4,
-    shuffle=True
+    shuffle=True,
+    collate_fn=collate_fn
 )
 
 print("DataLoader Ready")
 
 sample = next(iter(loader))
 
-print()
-
-print("Input Shape")
-
+print("\nInput Shape")
 print(sample["input_values"].shape)
 
-print()
-
-print("Labels")
-
-print(sample["label"])
-
+print("\nLabels")
+print(sample["labels"])
