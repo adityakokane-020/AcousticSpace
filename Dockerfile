@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN grep -vE '^(torch|torchvision)([<=>].*)?$' requirements.txt > requirements-docker.txt && \
+    pip install --no-cache-dir -r requirements-docker.txt && \
+    pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch torchvision
 
 COPY backend ./backend
 COPY ml ./ml

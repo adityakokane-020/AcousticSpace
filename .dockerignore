@@ -1,7 +1,14 @@
 .venv/
-__pycache__/
-*.pyc
 .git/
 .github/
-uploads/
+__pycache__/
+*.pyc
 *.log
+
+uploads/
+docs/
+
+ml/audio/
+ml/dataset/
+ml/spectrograms/
+ml/temp/
