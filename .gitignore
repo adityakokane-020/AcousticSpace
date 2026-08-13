@@ -1,6 +1,28 @@
+#Python
 --pycache--/
 *.pyc
-.venv/
 venv/
 .env
+
+#Node.js
+node_modules/
+
+#OS Files
+.DS_Store
+Thumbs.db
+
+#IDE Files
 .vscode/
+.idea/
+
+ml/asvspoof/
+
+ml/model/
+*.pth
+
+ml/features_rir.csv
+*.csv
+
+__pycache__/
+*.pyc
+
