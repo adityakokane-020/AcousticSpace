@@ -8,6 +8,10 @@ on:
     branches:
       - backend-branch
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test_backend:
     runs-on: ubuntu-latest
@@ -29,6 +33,17 @@ jobs:
         run: |
           python -c "from backend.main import app; print('Backend import successful')"
       
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker image
         run: |
-          docker build -t acousticspace .
+          docker build -t ghcr.io/adityakokane-020/acousticspace:latest .
+
+      - name: Push Docker image to GHCR
+        run: |
+          docker push ghcr.io/adityakokane-020/acousticspace:latest
