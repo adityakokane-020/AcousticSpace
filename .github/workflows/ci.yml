@@ -28,7 +28,6 @@ jobs:
       - name: Check backend import
         run: |
           python -c "from backend.main import app; print('Backend import successful')"
-            - name: Build Docker image
       
       - name: Build Docker image
         run: |
