@@ -1,9 +1,13 @@
 # AcousticSpace
 
 ## Project Title
+
+AcousticSpace: Deepfake Audio Detection using  Room Impulse Response (RIR)
+=======
 AcousticSpace: Physics-Based Deepfake Audio Detection using Room Impulse Response (RIR)
 
 ---
+>>>>>>> ml-branch
 
 ## Problem Statement
 
@@ -24,6 +28,12 @@ Traditional deepfake audio detection methods rely mainly on speaker characterist
 
 ### Backend
 - Python
+<<<<<<< HEAD
+- Machine Learning
+- Git
+- GitHub
+- VS Code
+=======
 - FastAPI
 
 ### Frontend
@@ -195,3 +205,4 @@ Week 4 ⏳ Pending
 ## Project Architecture
 
 ![Architecture](assets/architecture.png)
+>>>>>>> origin/main
