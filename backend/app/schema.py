@@ -7,6 +7,7 @@ class PredictionResponse(BaseModel):
     saved_location: str
     audio_info: dict[str, Any]
     prediction: dict[str, Any]
+    inference_time: float
 
 class ModelStatusResponse(BaseModel):
     model: str

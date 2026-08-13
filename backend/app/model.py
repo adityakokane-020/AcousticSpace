@@ -8,7 +8,7 @@ model.load_state_dict(
 )
 model.eval()
 def predict_audio(features):
-    with torch.no_grad():
+    with torch.inference_mode():
         output = model(features)
 
         probabilities = torch.softmax(output,dim=1)

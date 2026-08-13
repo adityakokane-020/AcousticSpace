@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
 import os
 import logging
+import librosa
 import time
 from backend.app.preprocess import load_audio, extract_spectrogram
 from backend.app.model import predict_audio
@@ -69,12 +70,20 @@ async def predict(file: UploadFile = File(...)):
         await file.seek(0)
 
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-        file_path = os.path.join(UPLOAD_FOLDER,file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+
+        save_start = time.perf_counter()
+
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
+
+        save_time = time.perf_counter() - save_start
+        print(f"File saving: {save_time:.4f}s")
         
-        audio_info = load_audio(file_path)
-        spectrogram_tensor = extract_spectrogram(file_path)
+        audio, sample_rate = librosa.load(file_path, sr=16000)
+        
+        audio_info = load_audio(audio, sample_rate)
+        spectrogram_tensor = extract_spectrogram(audio, sample_rate)
         prediction = predict_audio(spectrogram_tensor)
 
         inference_time = time.perf_counter() - start_time
