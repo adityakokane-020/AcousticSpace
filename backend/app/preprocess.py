@@ -7,16 +7,14 @@ from PIL import Image
 from torchvision import transforms
 from scipy.signal import convolve
 
-def load_audio(file_path):
-    audio, sample_rate = librosa.load(file_path, sr=None)
+def load_audio(audio, sample_rate):
     return{
         "sample rate": sample_rate,
         "duration": round(librosa.get_duration(y=audio, sr= sample_rate),2),
         "total_samples": len(audio)
     }
 
-def extract_spectrogram(file_path):
-    audio, sample_rate = librosa.load(file_path, sr=16000)
+def extract_spectrogram(audio,sample_rate):
 
     rir = np.zeros(4000)
     rir[0] = 1.0
