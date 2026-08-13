@@ -13,8 +13,10 @@ from sklearn.metrics import (
 from cnn_dataset import CNNDataset
 from model import AcousticCNN
 
+
 # Device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 # Dataset
 dataset = CNNDataset("ml/spectrograms")
@@ -25,12 +27,13 @@ loader = DataLoader(
     shuffle=False
 )
 
+
 # Model
 model = AcousticCNN()
 
 model.load_state_dict(
     torch.load(
-        "ml/model/cnn_best_model.pth",
+        "ml/model/best_model.pth",
         map_location=device
     )
 )
@@ -38,10 +41,12 @@ model.load_state_dict(
 model.to(device)
 model.eval()
 
+
 true_labels = []
 predicted_labels = []
 
-with torch.no_grad():
+
+with torch.inference_mode():
 
     for images, labels in loader:
 
@@ -49,7 +54,10 @@ with torch.no_grad():
 
         outputs = model(images)
 
-        predictions = torch.argmax(outputs, dim=1).cpu()
+        predictions = torch.argmax(
+            outputs,
+            dim=1
+        ).cpu()
 
         predicted_labels.extend(
             predictions.numpy()
@@ -58,6 +66,7 @@ with torch.no_grad():
         true_labels.extend(
             labels.numpy()
         )
+
 
 print("\n========== CNN Evaluation ==========\n")
 
@@ -96,6 +105,7 @@ print(
     )
 )
 
+
 print("\nConfusion Matrix\n")
 
 print(
@@ -105,12 +115,14 @@ print(
     )
 )
 
+
 print("\nClassification Report\n")
 
 print(
     classification_report(
         true_labels,
         predicted_labels,
+        labels=[0, 1],
         target_names=["Real", "Fake"],
         zero_division=0
     )

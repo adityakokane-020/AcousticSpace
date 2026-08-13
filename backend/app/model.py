@@ -22,7 +22,7 @@ def predict_audio(features):
 
         confidence, predicted = torch.max(probabilities, dim=1)
 
-    labels = ["Fake","Real"]
+    labels = ["Real","Fake"]
 
     return{
         "prediction": labels[predicted.item()],

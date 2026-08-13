@@ -3,7 +3,6 @@ from PIL import Image
 
 import torch
 from torch.utils.data import Dataset
-
 from torchvision import transforms
 
 
@@ -14,7 +13,6 @@ class CNNDataset(Dataset):
         self.samples = []
 
         self.transform = transforms.Compose([
-            transforms.Grayscale(num_output_channels=1),
             transforms.Resize((128, 128)),
             transforms.ToTensor()
         ])
@@ -22,7 +20,7 @@ class CNNDataset(Dataset):
         real_folder = os.path.join(root_folder, "real")
         fake_folder = os.path.join(root_folder, "fake")
 
-        # Real Images
+        # Real Images → label 0
         for image in os.listdir(real_folder):
 
             if image.endswith(".png"):
@@ -34,7 +32,7 @@ class CNNDataset(Dataset):
                     )
                 )
 
-        # Fake Images
+        # Fake Images → label 1
         for image in os.listdir(fake_folder):
 
             if image.endswith(".png"):
@@ -47,14 +45,13 @@ class CNNDataset(Dataset):
                 )
 
     def __len__(self):
-
         return len(self.samples)
 
     def __getitem__(self, index):
 
         image_path, label = self.samples[index]
 
-        image = Image.open(image_path)
+        image = Image.open(image_path).convert("RGB")
 
         image = self.transform(image)
 
