@@ -6,10 +6,10 @@ function UploadSection({ onDetect }) {
   const [dragging, setDragging] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
 
-  const validExtensions = [".wav", ".mp3", ".flac"];
+  const validExtensions = [".wav", ".mp3"];
 
   const validateFile = (file) => {
-    if (!file) return;
+    if (!file) return false;
 
     const fileName = file.name.toLowerCase();
 
@@ -18,23 +18,23 @@ function UploadSection({ onDetect }) {
     );
 
     if (!isValid) {
-      setError(
-        "❌ Invalid file. Please upload a .wav, .mp3, or .flac file."
-      );
-      setSelectedFile(null);
-      setAudioUrl("");
-      return;
+      setError("Please select a .wav or .mp3 audio file.");
+      return false;
     }
 
     setError("");
-    setSelectedFile(file);
-
-    const url = URL.createObjectURL(file);
-    setAudioUrl(url);
+    return true;
   };
 
   const handleFileChange = (event) => {
-    validateFile(event.target.files[0]);
+    const file = event.target.files[0];
+
+    if (!validateFile(file)) {
+      return;
+    }
+
+    setSelectedFile(file);
+    setAudioUrl(URL.createObjectURL(file));
   };
 
   const handleDrop = (event) => {
@@ -42,12 +42,18 @@ function UploadSection({ onDetect }) {
     setDragging(false);
 
     const file = event.dataTransfer.files[0];
-    validateFile(file);
+
+    if (!validateFile(file)) {
+      return;
+    }
+
+    setSelectedFile(file);
+    setAudioUrl(URL.createObjectURL(file));
   };
 
   const handleDetect = () => {
     if (!selectedFile) {
-      setError("⚠️ Please select an audio file first.");
+      setError("Please select an audio file first.");
       return;
     }
 
@@ -99,7 +105,7 @@ function UploadSection({ onDetect }) {
         <input
           id="audio-upload"
           type="file"
-          accept=".wav,.mp3,.flac"
+          accept=".wav,.mp3"
           onChange={handleFileChange}
           hidden
         />
@@ -112,7 +118,7 @@ function UploadSection({ onDetect }) {
         </label>
 
         <p className="formats">
-          Supported formats: .wav • .mp3 • .flac
+          Supported formats: .wav • .mp3
         </p>
 
         {selectedFile && (
@@ -121,19 +127,6 @@ function UploadSection({ onDetect }) {
               🎵 {selectedFile.name}
             </p>
 
-            {/* Waveform */}
-            <div className="waveform">
-              {Array.from({ length: 35 }).map((_, index) => (
-                <span
-                  key={index}
-                  style={{
-                    height: `${20 + Math.random() * 55}px`,
-                  }}
-                ></span>
-              ))}
-            </div>
-
-            {/* Audio Player */}
             <audio
               controls
               className="audio-player"
@@ -144,7 +137,7 @@ function UploadSection({ onDetect }) {
               className="remove-btn"
               onClick={removeFile}
             >
-              ✕ Remove File
+              ❌ Remove File
             </button>
           </div>
         )}

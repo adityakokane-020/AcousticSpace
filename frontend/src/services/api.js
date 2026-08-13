@@ -1,12 +1,30 @@
+const API_URL = "http://localhost:8000";
+
 export const detectAudio = async (audioFile) => {
-  // Backend API will be added here later
+  const formData = new FormData();
 
-  console.log("Selected File:", audioFile);
+  formData.append("file", audioFile);
 
-  // Temporary mock response
+  const response = await fetch(`${API_URL}/predict`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to analyze audio");
+  }
+
+  const data = await response.json();
+
   return {
-    result: "✅ Real Audio",
-    confidence: "98.4%",
-    status: "Authentic",
+    result: data.prediction.prediction,
+    confidence: data.prediction.confidence,
+    status:
+      data.prediction.prediction === "Real"
+        ? "Authentic"
+        : "AI Generated",
+    filename: data.filename,
+    audioInfo: data.audio_info,
+    inferenceTime: data.inference_time,
   };
 };
