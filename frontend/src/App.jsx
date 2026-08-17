@@ -1,6 +1,10 @@
+import ReportDownload from "./components/ReportDownload";
+import DatasetDownload from "./components/DatasetDownload";
 import { useState } from "react";
 import "./App.css";
 
+import LandingPage from "./components/LandingPage";
+import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
 import UploadSection from "./components/UploadSection";
 import ResultCard from "./components/ResultCard";
@@ -9,16 +13,23 @@ import Footer from "./components/Footer";
 import { detectAudio } from "./services/api";
 
 function App() {
+  // Current page
+  const [page, setPage] = useState("landing");
+
+  // Prediction state
   const [prediction, setPrediction] = useState({
     result: "No Prediction Yet",
     confidence: "--",
     status: "Waiting",
   });
 
+  // Loading state
   const [loading, setLoading] = useState(false);
 
+  // Detection history
   const [history, setHistory] = useState([]);
 
+  // Handle audio detection
   const handleDetect = async (file) => {
     if (!file) return;
 
@@ -29,7 +40,6 @@ function App() {
 
       setPrediction(response);
 
-      // Add prediction to history
       const newHistoryItem = {
         id: Date.now(),
         fileName: file.name,
@@ -55,45 +65,75 @@ function App() {
     }
   };
 
-  const scrollToUpload = () => {
-    document.getElementById("upload")?.scrollIntoView({
-      behavior: "smooth",
-    });
+  // Go directly to upload/dashboard
+  const handleGetStarted = () => {
+    setPage("dashboard");
+
+    setTimeout(() => {
+      document.getElementById("upload")?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }, 100);
   };
 
+  // Login success
+  const handleLogin = () => {
+    setPage("dashboard");
+  };
+
+  // Landing page
+  if (page === "landing") {
+    return (
+      <LandingPage
+        onLogin={() => setPage("login")}
+        onGetStarted={handleGetStarted}
+      />
+    );
+  }
+
+  // Login page
+  if (page === "login") {
+    return (
+      <LoginPage
+        onBack={() => setPage("landing")}
+        onLogin={handleLogin}
+      />
+    );
+  }
+
+  // Dashboard
   return (
     <div className="app">
 
-      <Navbar />
+      {/* NAVBAR */}
+      <Navbar
+        onHome={() => setPage("landing")}
+        onLogout={() => setPage("landing")}
+      />
 
-      {/* HERO */}
-      <section id="home" className="hero">
-        <div className="hero-content">
+      {/* DASHBOARD HEADER */}
+      <section className="dashboard-header">
 
-          <div className="hero-icon">
-            🎵
-          </div>
+        <div>
+          <span className="dashboard-label">
+            AI AUDIO INTELLIGENCE
+          </span>
 
-          <h1>AcousticSpace</h1>
-
-          <h2>
-            AI Powered Deepfake Audio Detection
-          </h2>
+          <h1>
+            Welcome to AcousticSpace
+          </h1>
 
           <p>
-            Upload an audio recording and let our AI analyze
-            whether the voice is <strong>Real</strong> or{" "}
-            <strong>AI Generated</strong>.
+            Analyze your audio recordings and detect
+            AI-generated voices.
           </p>
-
-          <button
-            className="hero-btn"
-            onClick={scrollToUpload}
-          >
-            🎧 Get Started
-          </button>
-
         </div>
+
+        <div className="dashboard-status">
+          <span className="status-dot"></span>
+          Detection System Ready
+        </div>
+
       </section>
 
       {/* UPLOAD */}
@@ -128,21 +168,42 @@ function App() {
         )}
 
       </section>
+            {/* DATASET */}
+      <DatasetDownload />
+
+      {/* REPORT */}
+      <ReportDownload
+        prediction={prediction}
+        history={history}
+      />
 
       {/* DETECTION HISTORY */}
       <section className="history-section">
 
-        <h2>📜 Detection History</h2>
+        <div className="section-heading">
+          <span>ANALYSIS ACTIVITY</span>
 
-        <p className="history-subtitle">
-          Previously analyzed audio files
-        </p>
+          <h2>
+            📜 Detection History
+          </h2>
+
+          <p className="history-subtitle">
+            Previously analyzed audio files
+          </p>
+        </div>
 
         {history.length === 0 ? (
 
           <div className="empty-history">
             <span>🎵</span>
-            <p>No audio analyzed yet.</p>
+
+            <p>
+              No audio analyzed yet.
+            </p>
+
+            <small>
+              Upload an audio file to begin your first analysis.
+            </small>
           </div>
 
         ) : (
@@ -157,7 +218,9 @@ function App() {
               >
 
                 <div className="history-file">
-                  🎵
+
+                  <span>🎵</span>
+
                   <div>
                     <strong>
                       {item.fileName}
@@ -167,9 +230,11 @@ function App() {
                       {item.status}
                     </small>
                   </div>
+
                 </div>
 
                 <div className="history-result">
+
                   <span>
                     {item.result}
                   </span>
@@ -177,6 +242,7 @@ function App() {
                   <strong>
                     {item.confidence}
                   </strong>
+
                 </div>
 
               </div>
