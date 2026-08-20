@@ -1,12 +1,7 @@
 from fastapi import FastAPI
-<<<<<<< HEAD
 from backend.app.routes import router
 from fastapi.middleware.cors import CORSMiddleware
-=======
-from fastapi.middleware.cors import CORSMiddleware
-from app.routes import router
 
->>>>>>> 13c6cb6adc3b5d46636f713b3a2c1d4f13b20d61
 
 app = FastAPI(
     title="AcousticSpace",
