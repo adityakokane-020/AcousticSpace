@@ -1,7 +1,8 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "http://localhost:8000";
 
 export const detectAudio = async (audioFile) => {
   const formData = new FormData();
+
   formData.append("file", audioFile);
 
   const response = await fetch(`${API_URL}/predict`, {
@@ -9,21 +10,17 @@ export const detectAudio = async (audioFile) => {
     body: formData,
   });
 
-  console.log("Backend status:", response.status);
+  if (!response.ok) {
+    throw new Error("Failed to analyze audio");
+  }
 
   const data = await response.json();
 
-  console.log("Backend response:", data);
-
-  if (!response.ok) {
-    throw new Error(data.detail || "Backend request failed");
-  }
-
   return {
-    result: data.prediction?.prediction ?? "Unknown",
-    confidence: data.prediction?.confidence ?? 0,
+    result: data.prediction.prediction,
+    confidence: data.prediction.confidence,
     status:
-      data.prediction?.prediction === "Real"
+      data.prediction.prediction === "Real"
         ? "Authentic"
         : "AI Generated",
     filename: data.filename,

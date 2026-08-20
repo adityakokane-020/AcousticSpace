@@ -28,6 +28,12 @@ Traditional deepfake audio detection methods rely mainly on speaker characterist
 
 ### Backend
 - Python
+<<<<<<< HEAD
+- Machine Learning
+- Git
+- GitHub
+- VS Code
+=======
 - FastAPI
 
 ### Frontend
@@ -199,3 +205,4 @@ Week 4 ⏳ Pending
 ## Project Architecture
 
 ![Architecture](assets/architecture.png)
+>>>>>>> origin/main
