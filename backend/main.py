@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from backend.app.routes import router
-from fastapi import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
-    title = "AcousticSpace",
-    version = "1.0.0",
-    description = "Backend API of AcousticSpace Project."
+    title="AcousticSpace",
+    version="1.0.0",
+    description="Backend API of AcousticSpace Project."
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -17,6 +18,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app.include_router(router)
-
-
