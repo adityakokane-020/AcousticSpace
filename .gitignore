@@ -26,3 +26,4 @@ ml/features_rir.csv
 __pycache__/
 *.pyc
 
+backend/uploads/
