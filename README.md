@@ -17,11 +17,9 @@ Traditional deepfake audio detection methods rely mainly on speaker characterist
 
 ## Team Members
 
-- Aditya Kokane – Team Leader / Machine Learning
-- Sudipta Chakraborty – Backend Developer
+- Aditya Kokane –  Machine Learning
+- Sudipta Chakraborty – Backend Developer 
 - Umera Usman Khwaja – Frontend Developer
-- Abhi – Machine Learning
-
 ---
 
 ## Tech Stack
